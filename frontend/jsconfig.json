@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2020",
+    "jsx": "react-jsx",
+    "checkJs": true,
+    "noImplicitAny": false,
+    "strict": false,
+    "strictNullChecks": false
+  },
+  "exclude": ["node_modules", "dist"]
+}
