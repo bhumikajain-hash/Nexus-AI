@@ -4,7 +4,7 @@ import MainRoutes from './MainRoutes'
 
 const App = () => {
   return (
-    <div className=" w-screen min-h-screen bg-black text-white p-5 ">
+    <div className=" w-full  min-h-screen bg-black text-white">
     
     <MainRoutes />
    
