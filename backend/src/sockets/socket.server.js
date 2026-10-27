@@ -9,7 +9,13 @@ const {createMemory , queryMemory} = require('../service/vector.service')
 
 function initSocketServer(httpServer){
 
-    const io = new Server(httpServer, { /* options */ });
+    const io = new Server(httpServer, { /* options */
+      cors: {
+      origin: "http://localhost:5173", // Must match your React frontend URL
+      methods: ["GET", "POST"],
+      credentials: true                // Required for cookies/auth
+    }
+    });
     // middleware to authenticate the socket connection using JWT token from cookies which is used allow only the authenticated users to connect to the socket server.
     
     io.use(async(socket, next)=>{

@@ -9,7 +9,7 @@ async function registerUser(req,res){
     const userAlreadyExists = await userModel.findOne({email})
 
     if(userAlreadyExists){
-        res.status(400).json({
+        return res.status(400).json({
             message:"User Already Exists"
         })
     }
@@ -43,14 +43,14 @@ async function loginUser(req,res){
 
     const user = await userModel.findOne({email})
     if(!user){
-        res.status(400).json({
+        return res.status(400).json({
             message:"Invalid Email or Password"
         })
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password)
     if(!isPasswordValid){
-        res.status(400).json({
+        return res.status(400).json({
             message:"Invalid Email or Password"
         })
     }
