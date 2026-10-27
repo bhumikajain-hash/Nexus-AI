@@ -44,13 +44,16 @@ A production-ready, full-stack AI chat platform featuring secure JWT cookie auth
 ```bash
 git clone https://github.com/bhumikajain-hash/NexusAI.git
 cd NexusAI
-
+```
 ### 2. Backend Setup
 ```bash 
 cd backend
 npm install  # or pnpm install
+npm run dev  # or pnpm dev
+```
 
 ### 3. Frontend Setup
 ```bash
 cd frontend
 npm install  # or pnpm install
+npm run dev  # or pnpm dev
