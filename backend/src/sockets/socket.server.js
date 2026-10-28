@@ -10,12 +10,25 @@ const {createMemory , queryMemory} = require('../service/vector.service')
 
 function initSocketServer(httpServer){
 
-    const io = new Server(httpServer, { /* options */
+  const allowedOrigins = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://nexusai-ai-1-jnf3.onrender.com" // Your live Render frontend URL
+    ];
+
+    const io = new Server(httpServer, {
       cors: {
-      origin: "http://localhost:5173", // Must match your React frontend URL
-      methods: ["GET", "POST"],
-      credentials: true                // Required for cookies/auth
-    }
+        origin: function (origin, callback) {
+          // Allow non-browser tools or matching origins
+          if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+          } else {
+            callback(new Error('Not allowed by CORS'));
+          }
+        },
+        methods: ["GET", "POST"],
+        credentials: true
+      }
     });
     // middleware to authenticate the socket connection using JWT token from cookies which is used allow only the authenticated users to connect to the socket server.
     
