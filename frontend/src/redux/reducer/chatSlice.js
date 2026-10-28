@@ -20,7 +20,7 @@ const chatSlice = createSlice({
     },
     setCurrentChat: (state, action) => {
       state.currentChat = action.payload;
-      state.messages = action.payload?.messages || [];
+      //state.messages = action.payload?.messages || [];
     },
     addNewChat: (state, action) => {
       state.chats.unshift(action.payload);

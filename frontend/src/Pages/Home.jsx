@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
-import axios from 'axios';
-import { addMessage, setLoading, addNewChat, setUser, setChats } from '../redux/reducer/chatSlice';
+import axios from '../api/axiosConfig.js';
+import { addMessage, setLoading, addNewChat, setUser, setChats, setMessages } from '../redux/reducer/chatSlice';
 import Sidebar from '../components/Sidebar';
 import MessageBubble from '../components/MessageBubble';
 import ChatInput from '../components/ChatInput';
+import { fetchChatMessages, fetchUserChats } from '../redux/action/chatActions.js';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -30,11 +31,12 @@ const Home = () => {
   useEffect(() => {
     const fetchUserDataAndChats = async () => {
       try {
-        const userRes = await axios.get('http://localhost:3000/auth/profile', { withCredentials: true });
+        const userRes = await axios.get('/auth/profile', { withCredentials: true });
         dispatch(setUser(userRes.data.user));
 
-        const chatsRes = await axios.get('http://localhost:3000/chat', { withCredentials: true });
-        dispatch(setChats(chatsRes.data.chats || []));
+      // @ts-ignore
+      dispatch(fetchUserChats());
+      
       } catch (err) {
         console.log("User not logged in");
       }
@@ -66,6 +68,13 @@ const Home = () => {
     return () => {newSocket.close()};
   }, [dispatch]);
 
+ useEffect(() => {
+  if (!currentChat?._id || currentChat._id.startsWith('chat-')) return;
+
+  // @ts-ignore
+  dispatch(fetchChatMessages(currentChat._id));
+}, [currentChat?._id, dispatch]);
+  
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!user) {
@@ -73,7 +82,10 @@ const Home = () => {
       window.location.href = '/login';
       return;
     }
-    if (!inputMessage.trim() || !currentChat) return;
+   if (!inputMessage.trim() || !currentChat || !currentChat._id || currentChat._id.startsWith('chat-')) {
+      alert("Please select or create a valid chat first.");
+      return;
+    }
 
     const userMessageText = inputMessage;
     dispatch(addMessage({ content: userMessageText, roles: 'user', _id: Date.now() }));
@@ -96,7 +108,7 @@ const Home = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/chat', {
+      const response = await axios.post('/chat', {
         title: `Chat Session ${Date.now().toString().slice(-4)}`
       }, { withCredentials: true });
 

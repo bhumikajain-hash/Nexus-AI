@@ -3,6 +3,7 @@ const { Server } = require("socket.io");
 const cookie = require('cookie')
 const jwt = require('jsonwebtoken')
 const userModel = require('../models/user.model')
+const chatModel = require('../models/chat.model')
 const aiServices = require('../service/ai.service')
 const messageModel = require('../models/message.model')
 const {createMemory , queryMemory} = require('../service/vector.service')
@@ -73,6 +74,10 @@ function initSocketServer(httpServer){
 
         ])
         //console.log(vectors)
+        await chatModel.findByIdAndUpdate(messagePayload.chat, {
+  $push: { messages: message._id },
+  lastActivity: Date.now()
+});
 
          //here we are saving the vectors into pinecone (vector database)
        try {
@@ -124,7 +129,7 @@ function initSocketServer(httpServer){
 
      const stm =  chatHistory.map(item => {
       return {
-        role : item.role,
+        role : item.roles,
         parts : [{text : item.content}]
 
       }
@@ -166,7 +171,10 @@ function initSocketServer(httpServer){
     //  })
      
     //  const responseVectors = await aiService.generateVector(response)
-
+    await chatModel.findByIdAndUpdate(messagePayload.chat, {
+      $push: { messages: responseMessage._id },
+      lastActivity: Date.now()
+    });
      await createMemory({
       vectors : responseVectors,
       messageId : responseMessage._id,

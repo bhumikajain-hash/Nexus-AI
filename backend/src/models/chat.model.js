@@ -12,6 +12,12 @@ const chatSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    messages: [
+        {
+            content: { type: String, required: true },
+            roles: { type: String, enum: ['user', 'model'], required: true }
+        }
+    ],
     lastActivity:{
         type:Date,
         default:Date.now
