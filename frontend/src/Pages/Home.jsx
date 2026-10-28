@@ -47,7 +47,8 @@ const Home = () => {
 
   // Socket setup
   useEffect(() => {
-    const newSocket = io('http://localhost:3000', {
+    // @ts-ignore
+    const newSocket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
       withCredentials: true,
     });
     setSocket(newSocket);
