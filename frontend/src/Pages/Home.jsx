@@ -15,7 +15,7 @@ const Home = () => {
   
   const [socket, setSocket] = useState(null);
   const [inputMessage, setInputMessage] = useState('');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Default open on desktop
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Default open on desktop
   
   const messagesEndRef = useRef(null);
 

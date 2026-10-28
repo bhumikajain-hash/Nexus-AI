@@ -1,8 +1,19 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const MessageBubble = ({ message }) => {
   const isUser = message.roles === 'user';
 
+  // @ts-ignore
+  const { user } = useSelector((state) => state.chat);
+
+  const getUserInitials = () => {
+    if (!user || !user.fullName) return 'U';
+    const first = user.fullName.firstName ? user.fullName.firstName[0].toUpperCase() : '';
+    const last = user.fullName.lastName ? user.fullName.lastName[0].toUpperCase() : '';
+    return (first + last) || 'U';
+  };
+  
   return (
     <div className={`flex gap-2 md:gap-4 max-w-3xl mx-auto w-full px-2 md:px-0 ${isUser ? 'justify-end' : 'justify-start'}`}>
       {/* AI Avatar */}
@@ -26,7 +37,7 @@ const MessageBubble = ({ message }) => {
       {/* User Avatar */}
       {isUser && (
         <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-slate-700 flex items-center justify-center shrink-0 text-white font-bold text-xs shadow-md">
-          B
+          {getUserInitials()}
         </div>
       )}
     </div>

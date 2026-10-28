@@ -68,12 +68,17 @@ const handleSelectChat = (chat) => {
     if (user.fullName?.firstName) {
       return `${user.fullName.firstName} ${user.fullName.lastName || ''}`.trim();
     }
-    return user.name || 'User';
+    return 'User';
   };
 
   const getInitial = () => {
-    const name = getUserName();
-    return name !== 'Guest User' ? name[0].toUpperCase() : 'U';
+    if (!user || !user.fullName) return 'U';
+    
+    const firstInitial = user.fullName.firstName ? user.fullName.firstName[0].toUpperCase() : '';
+    const lastInitial = user.fullName.lastName ? user.fullName.lastName[0].toUpperCase() : '';
+    
+    // Combines them (e.g., "B" + "J" = "BJ"). Fallbacks to 'U' if empty.
+    return (firstInitial + lastInitial) || 'U';
   };
 
   return (
@@ -140,7 +145,7 @@ const handleSelectChat = (chat) => {
             <p className="text-xs text-slate-400 truncate">{user?.email || 'Please login'}</p>
           </div>
         </div>
-        {user ? (
+        {/* {user ? (
           <button 
             onClick={handleLogout}
             title="Logout"
@@ -152,6 +157,22 @@ const handleSelectChat = (chat) => {
           <button 
             onClick={() => window.location.href = '/login'}
             className="text-xs bg-indigo-600  hover:bg-green-500  px-2.5 py-1.5 rounded-lg text-white shrink-0 font-medium"
+          >
+            Login
+          </button>
+        )} */}
+        {user ? (
+          <button 
+            onClick={handleLogout}
+            title="Logout"
+            className="text-xs bg-indigo-600 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg transition-colors duration-200 shrink-0 font-medium shadow"
+          >
+            Logout
+          </button>
+        ) : (
+          <button 
+            onClick={() => window.location.href = '/login'}
+            className="text-xs bg-indigo-600 hover:bg-emerald-600 px-3 py-1.5 rounded-lg text-white shrink-0 font-medium transition-colors duration-200 shadow"
           >
             Login
           </button>
