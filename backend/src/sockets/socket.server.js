@@ -13,7 +13,7 @@ function initSocketServer(httpServer){
   const allowedOrigins = [
         "http://localhost:5173",
         "http://localhost:3000",
-        "https://nexusai-ai-1-jnf3.onrender.com" // Your live Render frontend URL
+        "https://nexus-ai-1-jnf3.onrender.com" // Your live Render frontend URL
     ];
 
     const io = new Server(httpServer, {

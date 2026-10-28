@@ -10,7 +10,7 @@ const app = express()
 const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:3000',
-    'https://nexusai-ai-1-jnf3.onrender.com'
+    'https://nexus-ai-1-jnf3.onrender.com'
 ];
 
 // Clean and safe standard array configuration for CORS
